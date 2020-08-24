@@ -6,13 +6,13 @@ class Cipher:
     def __init__(self, key):
         self.key = key
 
-    def encryptMessage(self, message: str):
+    def encryptMessage(self, message: str) -> str:
         return self.__translateMessage(self.key, message, self.OPS, "encrypt")
 
-    def decryptMessage(self, message: str):
+    def decryptMessage(self, message: str) -> str:
         return self.__translateMessage(self.key, message, self.OPS, "decrypt")
 
-    def __translateMessage(self, key, message, OPS, mode) -> str:
+    def __translateMessage(self, key: str, message, OPS, mode) -> str:
         translated = list() # stores the encrypted/decrypted message string
         keyIndex = 0
         # key = key.upper()
