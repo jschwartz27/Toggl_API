@@ -2,8 +2,13 @@
 
 You must install and configure the venmo API:
 ```shell
-$ pip install venmo
-$ venmo configure
+$ conda env create -f environment.yml
+$ conda activate togglEnv
+```
+
+And when you want to exit the environment:
+```shell
+$ conda deactivate
 ```
 
 To run the main script, one argument must be provided:
