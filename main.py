@@ -1,8 +1,8 @@
 import argparse
-import dateutil.parser
 from datetime import date, timedelta
 from toggl.TogglPy import Toggl
 
+import analyze
 import email_functions
 from cipher import Cipher
 
@@ -39,44 +39,25 @@ def retrieve_toggl_data(CREDENTIALS, get_pdfs: bool) -> dict:
     print("\tWorkspace Name      : {}".format(workspace["name"]))
     print("\tWorkspace ID        : {}".format(workspace["id"]))
     print("\tWorkspace api_token : {}\n".format(workspace["api_token"]))
-    # TODO get real dates... maybe option to select date window
-    data = {
+
+    details = {
         "workspace_id" : workspace["id"],
         "since"        : "{}-{}-{}".format(begin.year, begin.month, begin.day),
         "until"        : "{}-{}-{}".format(today.year, today.month, today.day)
     }
 
     the_D = {
-        "reportSummary"  : toggl.getSummaryReport(data),
-        "reportDetailed" : toggl.getDetailedReport(data),
-        "reportWeekly"   : toggl.getWeeklyReport(data)
+        "reportSummary"  : toggl.getSummaryReport(details),
+        "reportDetailed" : toggl.getDetailedReport(details),
+        "reportWeekly"   : toggl.getWeeklyReport(details)
     }
 
     if get_pdfs:    
-        toggl.getSummaryReportPDF(data, "summary-report.pdf")
-        toggl.getDetailedReportPDF(data, "detailed-report.pdf")
-        toggl.getWeeklyReportPDF(data, "weekly-report.pdf")
+        toggl.getSummaryReportPDF(details,  "summary-report.pdf")
+        toggl.getDetailedReportPDF(details, "detailed-report.pdf")
+        toggl.getWeeklyReportPDF(details,   "weekly-report.pdf")
 
     return the_D
-
-
-def analyze_data(data: dict) -> dict:
-
-    def _mSec_to_min(ms: int) -> float:
-        return ms/60000
-
-    def _parse_ISO8601(datestring: str):
-        return dateutil.parser.parse(datestring)
-    
-    def _return_date_formated(ISO8601data) -> str:
-        # return 'Thursday 11. June 2020 16:26' e.g.
-        return ISO8601data.strftime("%A %d. %B %Y %H:%M")
-
-    for i in data[0]:
-        print(i)
-        print()
-    
-    quit()
 
 
 def main() -> None:
@@ -91,8 +72,8 @@ def main() -> None:
     }
 
     the_D = retrieve_toggl_data(creds, args.pdf)
-    results = analyze_data(the_D["reportDetailed"]["data"])
-    email_functions.send(results["message"], args.pdf, e_CREDS_deCRYpTed)
+    analysis = analyze.analyze_data(the_D)
+    # email_functions.send(analysis["message"], args.pdf, e_CREDS_deCRYpTed)
 
 if __name__ == "__main__":
     main()
