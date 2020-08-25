@@ -12,3 +12,7 @@ To run the main script, one argument must be provided:
  ```shell
 $ python main.py -key "example_key"
 ```
+You can also add the function to attach pdfs to the email:
+ ```shell
+$ python main.py -key "example_key" -pdf True
+```
