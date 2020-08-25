@@ -1,6 +1,6 @@
 # Toggl_API
 
-You must install and configure the venmo API:
+Create your environment with the following command:
 ```shell
 $ conda env create -f environment.yml
 $ conda activate togglEnv
