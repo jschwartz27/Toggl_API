@@ -1,3 +1,6 @@
 # Toggl_API
 
-Yeee
+```shell
+$ pip install venmo
+$ venmo configure
+```
