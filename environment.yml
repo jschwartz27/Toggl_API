@@ -4,6 +4,7 @@ dependencies:
   - pip:
     - TogglPy
     - venmo-api
+    - PyYAML
     # - cryptography=2.8=py36h7a1dbc1_0
     # - nltk==3.4.5
     # - python-dateutil==2.8.1
