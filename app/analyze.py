@@ -17,15 +17,15 @@ def analyze_data(data: dict) -> dict:
     n_entries = len(data_detailed)
     end_datetimes = list(map(lambda x: x["end"] , data_detailed))
     descriptions = list(set(map(lambda x: x["description"] , data_detailed)))
+    # descriptions.remove(None)
+    projects = list(set(map(lambda x: x["project"] , data_detailed)))
+    # projects.remove(None)
     # duration in minutes
     dur = _mSec_to_min(sum(list(map(lambda x: x["dur"] , data_detailed))))
-
-
 
     # ? or maybe just sort data by end date?
     # ? function also to just sum total time and compare to 40 h/week
     # and also number of projects
-    # number of entries
 
     # then also compare present data to all data,
     # get all data and compare last week to all

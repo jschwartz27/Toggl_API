@@ -12,9 +12,14 @@ CREDENTIALS_ENCRYPT = {
     "API_TOKEN" : "DXRy@cDbfhhzFR71ocH DlGaGU6W Vfb" 
 }
 EMAIL_CREDENTIALS = {
-    "username" : "2EFaMLEEUDSpBZP",
-    "password" : "87FltNEHGQHs7H73"
+    "usernameFrom" : "1$EXoFQCMFUk8.",
+    "password"     : "87FltNEHGQHs7H73",
+    "usernameTo"   : "2EFaMLEEUDSpBZP"
 }
+
+
+def load_yml(name: str) -> dict:
+    filename = name + ".yml"
 
 
 def get_args() -> object:
@@ -28,6 +33,7 @@ def get_args() -> object:
 
 def main() -> None:
     args = get_args()
+    configs = load_yml("config")
     c = Cipher(args.key)
 
     creds = {
@@ -41,7 +47,7 @@ def main() -> None:
     the_D = toggl_function.retrieve_toggl_data(creds, args.pdf)
     analysis = analyze.analyze_data(the_D)
     # email_function.send(analysis["message"], args.pdf, e_CREDS_deCRYpTed)
-    # venmo_function()
+    # venmo_function(configs["transfer_amount"])
 
 if __name__ == "__main__":
     main()

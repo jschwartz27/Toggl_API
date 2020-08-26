@@ -21,7 +21,8 @@ def transfer_funds(amount: float):
                                     callback=callback,
                                     page=2,
                                     count=10)'''
-
+    venmo.log_out("Bearer a40fsdfhsfhdsfjhdkgljsdglkdsfj3j3i4349t34j7d")
+    # venmo.payment.send_money(13.68, "thanks for the 🍔", "1122334455667")
 
 def main():
 	transfer_funds(5)	

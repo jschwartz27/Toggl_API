@@ -8,8 +8,8 @@ from email import encoders
 
 def send(data, pdf_attach: bool, CREDENTIALS) -> None:
     pdf_names = ["summary-report.pdf", "detailed-report.pdf", "weekly-report.pdf"]
-    fromaddr = CREDENTIALS["username"] + "@gmail.com"
-    toaddr   = CREDENTIALS["username"] + "@gmail.com"
+    fromaddr = CREDENTIALS["usernameFrom"] + "@gmail.com"
+    toaddr   = CREDENTIALS["usernameTo"] + "@gmail.com"
 
     msg = MIMEMultipart()  
     msg['From'] = fromaddr  
