@@ -7,8 +7,8 @@ def retrieve_toggl_data(CREDENTIALS, get_pdfs: bool) -> dict:
     begin = today - timedelta(days=90)
     years_5 = date(2019, 2, 2)
     toggl = Toggl()
-    toggl.setAuthCredentials(CREDENTIALS["EMAIL"], CREDENTIALS["PASSWORD"])
-    toggl.setAPIKey(CREDENTIALS["API_TOKEN"]) 
+    toggl.setAuthCredentials(CREDENTIALS["username"], CREDENTIALS["password"])
+    toggl.setAPIKey(CREDENTIALS["api_token"]) 
     workspace = toggl.getWorkspaces()[0]
 
     print("\nPROFILE DETAILS::")

@@ -11,11 +11,9 @@ And when you want to exit the environment:
 $ conda deactivate
 ```
 
-To run the main script, one argument must be provided:
-  - the key which you have received
- 
- ```shell
-$ python main.py -key "example_key"
+To run the main script:
+```shell
+$ python main.py
 ```
 You can also add the function to attach pdfs to the email:
  ```shell

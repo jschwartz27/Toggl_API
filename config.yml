@@ -1,4 +1,4 @@
 transfer_amount:
-  - 20.00  # units: dollars; be careful here
+  - 1.00  # units: dollars; be careful here
 analysis_window:
   - 7      # units: days, ergo 7 = 1 week
