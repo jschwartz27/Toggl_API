@@ -1,4 +1,4 @@
-# Toggl_API
+# Toggl Progress API
 
 Create your environment with the following command:
 ```shell
