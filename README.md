@@ -3,7 +3,7 @@
 Create your environment with the following command:
 ```shell
 $ conda env create -f environment.yml
-$ conda activate togglEnv
+$ conda activate toggl_env
 ```
 
 And when you want to exit the environment:

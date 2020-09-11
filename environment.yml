@@ -1,11 +1,16 @@
-name: togglEnv
+name: toggl_env
 dependencies:
   - pip=20.2.2
   - pip:
     - TogglPy
     - venmo-api
     - PyYAML
+    - python-dateutil==2.8.1
     # - cryptography=2.8=py36h7a1dbc1_0
     # - nltk==3.4.5
-    # - python-dateutil==2.8.1
     # - venmo
+
+# without environment activation
+# conda env update --name myenv --file local.yml
+# or
+# conda env update --file local.yml

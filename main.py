@@ -11,11 +11,14 @@ def main() -> None:
     configs = helper_functions.load_yml("config")
 
     the_D = toggl_function.retrieve_toggl_data(CREDENTIALS["toggl"], args.pdf)
-    print(the_D)
-    quit()
     analysis = analyze.analyze_data(the_D)
-    # email_function.send(analysis["message"], args.pdf, CREDENTIALS["email"])
+
     # venmo_function(configs["transfer_amount"], CREDENTIALS["venmo"])
+    try:
+        email_function.send(analysis, args.pdf, CREDENTIALS["email"])
+        print("EMAIL SENT!")
+    except:
+        print("ERROR: EMAIL FAILED TO SEND")
 
 if __name__ == "__main__":
     main()
