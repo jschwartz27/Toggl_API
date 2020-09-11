@@ -16,7 +16,7 @@ def main() -> None:
         configs["transfer_amount"]
     )
 
-    # venmo_function(t_amount, CREDENTIALS["venmo"])
+    venmo_function.transfer_funds(t_amount, CREDENTIALS["venmo"])
     try:
         email_function.send(analysis, args.pdf, CREDENTIALS["email"])
         print("EMAIL SENT!")
