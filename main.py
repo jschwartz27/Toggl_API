@@ -11,9 +11,12 @@ def main() -> None:
     configs = helper_functions.load_yml("config")
 
     the_D, dates = toggl_function.retrieve_toggl_data(CREDENTIALS["toggl"], args.pdf)
-    analysis = analyze.analyze_data(the_D, dates)
+    analysis, t_amount = analyze.analyze_data(
+        the_D, dates, configs["desired_hours"], configs["analysis_window"],
+        configs["transfer_amount"]
+    )
 
-    # venmo_function(configs["transfer_amount"], CREDENTIALS["venmo"])
+    # venmo_function(t_amount, CREDENTIALS["venmo"])
     try:
         email_function.send(analysis, args.pdf, CREDENTIALS["email"])
         print("EMAIL SENT!")
@@ -22,3 +25,8 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
+'''
+Questions for Yousef:
+    calculating based on 7days: maybe this should just be 5 days for workweek?
+'''

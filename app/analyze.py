@@ -2,13 +2,24 @@ import statistics
 import dateutil.parser
 
 
-def create_report(analysis, dates):
+def create_report(analysis, dates, transfer, hours_delta, desired_hours) -> dict:
+
+    def _get_text(transfer, hours_delta, desired_hours):
+        if transfer[0] > 0:
+            return """\
+                Unfortunately, you have failed to meet your target goal of 
+                <b>{0}</b> hrs/week by {1} hours. Therefore, an amount of <b>{2}</b> will be 
+                withdrawn from your account!
+            """.format(desired_hours, hours_delta, transfer[1])
+        else:
+            return "Good Job!"
+
     begin = "{}/{}/{}".format(dates[0].month, dates[0].day, dates[0].year)
     today = "{}/{}/{}".format(dates[1].month, dates[1].day, dates[1].year)
     subject = "Progress report ({}-{})".format(begin, today)
     tab = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
     greeting = "Dear Yousef,"
-    text = "This is to inform you that..."
+    text = _get_text(transfer, hours_delta, desired_hours)
     analysis_str = "\n"
     for name in analysis:
         name_b = "<b>" + name + "</b>"
@@ -16,62 +27,110 @@ def create_report(analysis, dates):
     closing = "Sincerely,<br>{}Your friendly AI overlord".format(tab)
     body = greeting + text + analysis_str + closing
     body = """\
-        <html>
-        <head></head>
+        <html><head></head>
         <body>
             <p>
                 <br>{0}<br>
-                {1}This email... blah blah<br>{2}<br><br>{3}
+                {1}{2}<br>{3}<br><br>{4}
             </p>
         </body>
         </html>
-    """.format(greeting, tab, analysis_str, closing)
+    """.format(greeting, tab, text, analysis_str, closing)
+
     return {
         "subject": subject,
         "body": body
     }
 
 
-def analyze_data(data: dict, dates) -> dict:
+def analyze_data(data: dict, dates, desired_hours: float, day_range: int,
+                 transfer_amount: float) -> dict:
 
-    def _mSec_to_min(ms: int) -> float:
-        return ms/60000
+    def color(item, hours: float, desired_hours: float) -> str:
+        c = {
+            "green": "rgb(106, 168, 79)",
+            "red": "rgb(244, 102, 102)"
+        }
+        valence = c["green"] if hours >= desired_hours else c["red"]
+        span = "<span style='background-color: {}'>".format(valence)
+        return span + str(item) + "</span>"
+
+
+    def _mSec_to_hours(ms: int) -> float:
+        return round((ms/60000) / 60, 2)
 
     def _parse_ISO8601(datestring: str):
         return dateutil.parser.parse(datestring)
 
-    def _return_date_formated(ISO8601data) -> str:
-        # return 'Thursday 11. June 2020 16:26' e.g.
-        return ISO8601data.strftime("%A %d. %B %Y %H:%M")
+    def _transfer_amount(total_hours: float, desired_hours: float,
+                         transfer_amount: float):
+        '''
+        # TODO
+        and for retrieving money when worked e.g. 60 hours.. maybe have a log
+        of how much money has been transferred so can't go over total amount
+        '''
+        if tot_hours >= desired_hours:
+            return 0
+        else:
+            return round(transfer_amount*(.93**total_hours), 2)
+
+    # def _return_date_formated(ISO8601data) -> str:
+    #    # return 'Thursday 11. June 2020 16:26' e.g.
+    #    return ISO8601data.strftime("%A %d. %B %Y %H:%M")
 
     analysis = dict()
 
     data_detailed = data["reportDetailed"]["data"]
-    #for datum in data_detailed:
-    #    datum["DAY"] = _parse_ISO8601(datum).day 
+    ms_per_day = dict()
+    for datum in data_detailed:
+        # ? What if working from 23:00 to 04:00? All hour will be for day
+        # ? of start time
+        day = str(_parse_ISO8601(datum["start"]).day)
+        if day not in ms_per_day:    
+            ms_per_day[day] = datum["dur"]
+        else:
+            ms_per_day[day] += datum["dur"]
+
+    daily_mSecs = list(ms_per_day.values())
+    tot_hours = _mSec_to_hours(sum(daily_mSecs))
+    while len(daily_mSecs) < day_range:
+        daily_mSecs.append(0)
+    mean_hour_per_day = _mSec_to_hours(statistics.mean(daily_mSecs))
+    stdev_hour_per_day = _mSec_to_hours(statistics.stdev(daily_mSecs))
 
     n_entries = len(data_detailed)
     end_datetimes = list(map(lambda x: x["end"] , data_detailed))
+
+    unknown = ("", None)
     descriptions = list(set(map(lambda x: x["description"] , data_detailed)))
-    # descriptions.remove(None)
-
     projects = list(set(map(lambda x: x["project"] , data_detailed)))
-    # projects.remove(None)
-    
-    # duration in minutes
-    dur = _mSec_to_min(sum(list(map(lambda x: x["dur"] , data_detailed))))
-
-    # ? function also to just sum total time and compare to 40 h/week
-    # and also number of projects
+    for i in [[descriptions, "No Description"], [projects, "Unnamed Project"]]:
+        app = False
+        for j in unknown:
+            if j in i[0]:
+                app = True
+                i[0].remove(j)
+        if app:
+            i[0].append(i[1])
 
     # then also compare present data to all data,
     # get all data and compare last week to all
     # ? Maybe also email some graphs of data?
 
-    analysis["Entries"] = str(n_entries)
-    analysis["Total Time (min)"] = str(round(dur, 2))
+    tab = "&nbsp;&nbsp;&nbsp;&nbsp;"
+    analysis["Total Time (hours)"] = color(tot_hours, tot_hours, desired_hours)
+    analysis["{}Mean (hrs/day)".format(tab)] = str(mean_hour_per_day)
+    analysis["{}Standard Deviation (hrs/day)".format(tab)] = str(stdev_hour_per_day)
+    
+    analysis["Total Entries"] = str(n_entries)
+    analysis["{}Number of Porjects".format(tab)] = str(len(projects))
 
-    return create_report(analysis, dates)
+    t_amount = _transfer_amount(tot_hours, desired_hours, transfer_amount)
+    transfer = [t_amount, color("$" + str(t_amount), tot_hours, desired_hours)]
+    hours_delta = desired_hours - tot_hours
+
+    return create_report(analysis, dates, transfer, hours_delta,
+                         desired_hours), t_amount
 
 
 def main():

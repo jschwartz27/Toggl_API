@@ -1,4 +1,6 @@
+desired_hours:
+  40  # weekly
 transfer_amount:
-  - 1.00  # units: dollars; be careful here
+  20.00  # units: dollars; be careful here. Is the Max amount
 analysis_window:
-  - 7      # units: days, ergo 7 = 1 week
+  7      # units: days, ergo 7 = 1 week
