@@ -33,7 +33,7 @@ def retrieve_toggl_data(CREDENTIALS, get_pdfs: bool) -> dict:
         toggl.getDetailedReportPDF(details, "detailed-report.pdf")
         toggl.getWeeklyReportPDF(details,   "weekly-report.pdf")
 
-    return the_D
+    return the_D, (begin, today)
 
 '''
 >>> yourdate.ctime()

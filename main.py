@@ -10,8 +10,8 @@ def main() -> None:
     CREDENTIALS = helper_functions.load_yml("../toggl_creds")
     configs = helper_functions.load_yml("config")
 
-    the_D = toggl_function.retrieve_toggl_data(CREDENTIALS["toggl"], args.pdf)
-    analysis = analyze.analyze_data(the_D)
+    the_D, dates = toggl_function.retrieve_toggl_data(CREDENTIALS["toggl"], args.pdf)
+    analysis = analyze.analyze_data(the_D, dates)
 
     # venmo_function(configs["transfer_amount"], CREDENTIALS["venmo"])
     try:

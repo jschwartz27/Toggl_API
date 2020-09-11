@@ -2,7 +2,37 @@ import statistics
 import dateutil.parser
 
 
-def analyze_data(data: dict) -> dict:
+def create_report(analysis, dates):
+    begin = "{}/{}/{}".format(dates[0].month, dates[0].day, dates[0].year)
+    today = "{}/{}/{}".format(dates[1].month, dates[1].day, dates[1].year)
+    subject = "Progress report ({}-{})".format(begin, today)
+    tab = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+    greeting = "Dear Yousef,"
+    text = "This is to inform you that..."
+    analysis_str = "\n"
+    for name in analysis:
+        name_b = "<b>" + name + "</b>"
+        analysis_str += "<br>{}".format(tab) + name_b + ": " + analysis[name] 
+    closing = "Sincerely,<br>{}Your friendly AI overlord".format(tab)
+    body = greeting + text + analysis_str + closing
+    body = """\
+        <html>
+        <head></head>
+        <body>
+            <p>
+                <br>{0}<br>
+                {1}This email... blah blah<br>{2}<br><br>{3}
+            </p>
+        </body>
+        </html>
+    """.format(greeting, tab, analysis_str, closing)
+    return {
+        "subject": subject,
+        "body": body
+    }
+
+
+def analyze_data(data: dict, dates) -> dict:
 
     def _mSec_to_min(ms: int) -> float:
         return ms/60000
@@ -17,14 +47,14 @@ def analyze_data(data: dict) -> dict:
     analysis = dict()
 
     data_detailed = data["reportDetailed"]["data"]
-    for datum in data_detailed:
-        datum["DAY"] = _parse_ISO8601(datum).day 
+    #for datum in data_detailed:
+    #    datum["DAY"] = _parse_ISO8601(datum).day 
 
     n_entries = len(data_detailed)
     end_datetimes = list(map(lambda x: x["end"] , data_detailed))
     descriptions = list(set(map(lambda x: x["description"] , data_detailed)))
     # descriptions.remove(None)
-    
+
     projects = list(set(map(lambda x: x["project"] , data_detailed)))
     # projects.remove(None)
     
@@ -38,7 +68,10 @@ def analyze_data(data: dict) -> dict:
     # get all data and compare last week to all
     # ? Maybe also email some graphs of data?
 
-    return analysis
+    analysis["Entries"] = str(n_entries)
+    analysis["Total Time (min)"] = str(round(dur, 2))
+
+    return create_report(analysis, dates)
 
 
 def main():

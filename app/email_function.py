@@ -15,7 +15,8 @@ def send(data, pdf_attach: bool, CREDENTIALS) -> None:
     msg['From'] = fromaddr  
     msg['To'] = toaddr   
     msg['Subject'] = data["subject"]
-    msg.attach(MIMEText(data["body"], 'plain')) 
+    # msg.attach(MIMEText(data["body"], 'plain'))
+    msg.attach(MIMEText(data["body"], 'html'))
 
     if pdf_attach:
         for filename in pdf_names: 
