@@ -12,10 +12,11 @@ def create_report(analysis, dates, transfer, hours_delta, desired_hours) -> dict
                 withdrawn from your account!
             """.format(desired_hours, hours_delta, transfer[1])
         else:
-            return "Good Job!"
+            return "Good Job!"  # TODO
 
     begin = "{}/{}/{}".format(dates[0].month, dates[0].day, dates[0].year)
     today = "{}/{}/{}".format(dates[1].month, dates[1].day, dates[1].year)
+
     subject = "Progress report ({}-{})".format(begin, today)
     tab = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
     greeting = "Dear Yousef,"
@@ -25,7 +26,7 @@ def create_report(analysis, dates, transfer, hours_delta, desired_hours) -> dict
         name_b = "<b>" + name + "</b>"
         analysis_str += "<br>{}".format(tab) + name_b + ": " + analysis[name] 
     closing = "Sincerely,<br>{}Your friendly AI overlord".format(tab)
-    body = greeting + text + analysis_str + closing
+
     body = """\
         <html><head></head><body><p>
             <br>{0}<br>{1}{2}<br>{3}<br><br>{4}
@@ -33,8 +34,8 @@ def create_report(analysis, dates, transfer, hours_delta, desired_hours) -> dict
     """.format(greeting, tab, text, analysis_str, closing)
 
     return {
-        "subject": subject,
-        "body": body
+        "subject" : subject,
+        "body"    : body
     }
 
 
@@ -43,8 +44,8 @@ def analyze_data(data: dict, dates, desired_hours: float, day_range: int,
 
     def color(item, hours: float, desired_hours: float) -> str:
         c = {
-            "green": "rgb(106, 168, 79)",
-            "red": "rgb(244, 102, 102)"
+            "green" : "rgb(106, 168, 79)",
+            "red"   : "rgb(244, 102, 102)"
         }
         valence = c["green"] if hours >= desired_hours else c["red"]
         span = "<span style='background-color: {}'>".format(valence)
@@ -93,7 +94,6 @@ def analyze_data(data: dict, dates, desired_hours: float, day_range: int,
     mean_hour_per_day = _mSec_to_hours(statistics.mean(daily_mSecs))
     stdev_hour_per_day = _mSec_to_hours(statistics.stdev(daily_mSecs))
 
-    n_entries = len(data_detailed)
     # end_datetimes = list(map(lambda x: x["end"] , data_detailed))
 
     unknown = ("", None)
@@ -116,7 +116,7 @@ def analyze_data(data: dict, dates, desired_hours: float, day_range: int,
     analysis["Total Time (hours)"] = color(tot_hours, tot_hours, desired_hours)
     analysis["{}Mean (hrs/day)".format(tab)] = str(mean_hour_per_day)
     analysis["{}Standard Deviation (hrs/day)".format(tab)] = str(stdev_hour_per_day)
-    analysis["Total Entries"] = str(n_entries)
+    analysis["Total Entries"] = str(len(data_detailed))
     analysis["{}Number of Porjects".format(tab)] = str(len(projects))
 
     t_amount = _transfer_amount(tot_hours, desired_hours, transfer_amount)
@@ -126,8 +126,10 @@ def analyze_data(data: dict, dates, desired_hours: float, day_range: int,
     return create_report(analysis, dates, transfer, hours_delta,
                          desired_hours), t_amount
 
-
 """
+
+    Filter: "project": "H4L" && "Floori ..."
+
 def main():
     data = { "reportDetailed": {"data": [
         {'id': 1655327710, 'pid': 155907692, 'tid': None, 'uid': 4412058, 'description': 'redline the SHI agreement', 'start': '2020-08-13T12:54:36-05:00', 'end': '2020-08-13T12:55:25-05:00', 'updated': '2020-08-13T12:55:25-05:00', 'dur': 49000, 'user': 'Yousef', 'use_stop': True, 'client': None, 'project': 'Floori Operations', 'project_color': '0', 'project_hex_color': '#e36a00', 'task': None, 'billable': None, 'is_billable': False, 'cur': None, 'tags': []},

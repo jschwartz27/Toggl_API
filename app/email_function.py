@@ -10,6 +10,7 @@ def send(data, pdf_attach: bool, CREDENTIALS) -> None:
     pdf_names = ["summary-report.pdf", "detailed-report.pdf", "weekly-report.pdf"]
     fromaddr = CREDENTIALS["username"]
     toaddr   = CREDENTIALS["usernameTo"]
+    password = CREDENTIALS["password"]
 
     msg = MIMEMultipart()  
     msg['From'] = fromaddr  
@@ -25,13 +26,14 @@ def send(data, pdf_attach: bool, CREDENTIALS) -> None:
             # To change the payload into encoded form 
             p.set_payload((attachment).read()) 
             encoders.encode_base64(p) 
-            p.add_header('toggl_data', "attachment; filename= %s" % filename) 
+            header = 'toggl_data', "attachment; filename={}".format(filename)
+            p.add_header(header)
             msg.attach(p) 
 
     s = smtplib.SMTP('smtp.gmail.com', 587)     # creates SMTP session 
     s.starttls()                                # start TLS for security 
-    s.login(fromaddr, CREDENTIALS["password"])  # Authentication    
-    text = msg.as_string()         # Converts the Multipart msg into a string
+    s.login(fromaddr, password)  # Authentication    
+    text = msg.as_string()       # Converts the Multipart msg into a string
     s.sendmail(fromaddr, toaddr, text)
     s.quit()
 

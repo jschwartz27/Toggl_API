@@ -7,20 +7,15 @@ def transfer_funds(amount: float, CREDENTIALS):
     #                                       password=CREDENTIALS["password"])
 
     venmo = Client(access_token=CREDENTIALS["access_token"])
+    # ! try except with error output
 
-    # Search for users. You get 50 results per page.
-    users = venmo.user.search_for_users(query="Peter",
-                                        page=2)
-    for user in users:
-        print(user.username)
     quit()
-    '''# Or, you can pass a callback to make it multi-threaded
-    def callback(users):
-        for user in users:
-            print(user.username)
-        venmo.user.search_for_users(query="peter",
-                                    callback=callback,
-                                    page=2,
-                                    count=10)'''
-    venmo.log_out("Bearer a40fsdfhsfhdsfjhdkgljsdglkdsfj3j3i4349t34j7d")
+    # ! is there a way to check balance first??
+    # ? Does there need to be money in venmo first or does it withdraw
+    # venmo.payment.send_money(amount, "motivation money", "MY NUMBA or profile??")
+
+    log_out_str = "{} {}".format(CREDENTIALS["username"],
+                                 CREDENTIALS["access_token"])
+    # venmo.log_out("Bearer a40fsdfhsfhdsfjhdkgljsdglkdsfj3j3i4349t34j7d")
+    venmo.log_out(log_out_str)
     # venmo.payment.send_money(13.68, "thanks for the 🍔", "1122334455667")
