@@ -8,7 +8,6 @@ dependencies:
     - python-dateutil==2.8.1
     # - cryptography=2.8=py36h7a1dbc1_0
     # - nltk==3.4.5
-    # - venmo
 
 # without environment activation
 # conda env update --name myenv --file local.yml

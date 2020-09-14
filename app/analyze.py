@@ -68,7 +68,8 @@ def analyze_data(data: dict, dates, desired_hours: float, day_range: int,
             return 0
         else:
             # vielleicht log?
-            return round(transfer_amount*(.95**total_hours), 2)
+            # return round(transfer_amount*(.95**total_hours), 2)
+            return round(transfer_amount+(.0003125*(-total_hours**3)),2)
 
     # def _return_date_formated(ISO8601data) -> str:
     #    # return 'Thursday 11. June 2020 16:26' e.g.
