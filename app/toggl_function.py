@@ -30,13 +30,13 @@ def retrieve_toggl_data(CREDENTIALS, get_pdfs: bool) -> dict:
     }
 
     the_D = {  # ? Some of these might not be necessary
-        "reportSummary"  : toggl.getSummaryReport(details),  # !
+        # "reportSummary"  : toggl.getSummaryReport(details),  # !
         "reportDetailed" : toggl.getDetailedReport(details),
-        "reportWeekly"   : toggl.getWeeklyReport(details)
+        # "reportWeekly"   : toggl.getWeeklyReport(details)
     }
 
     if get_pdfs:    
-        toggl.getSummaryReportPDF(details,  "summary-report.pdf")  # !
+        toggl.getSummaryReportPDF(details,  "summary-report.pdf")
         toggl.getDetailedReportPDF(details, "detailed-report.pdf")
         toggl.getWeeklyReportPDF(details,   "weekly-report.pdf")
 
