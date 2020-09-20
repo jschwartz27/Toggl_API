@@ -6,8 +6,16 @@ import app.venmo_function as venmo_function
 
 
 def main() -> None:
+    
+    
     args = helper_functions.get_args()
     CREDENTIALS = helper_functions.load_yml("../toggl_creds")
+    venmo_function.transfer_funds(1, CREDENTIALS["venmo"])
+
+
+
+
+    quit()
     configs = helper_functions.load_yml("config")
 
     the_D, dates = toggl_function.retrieve_toggl_data(CREDENTIALS["toggl"], args.pdf)

@@ -1,0 +1,9 @@
+
+- schedule: cron(0 13 ? * MON *) # 8AM TX time
+# 15:00 UTX == 17:00 deutschland
+# the example from our serverless.yml that runs every Monday at 03:15AM UTC
+# - schedule: cron(15 3 ? * MON *)
+# run in 10-minute increments from the start of the hour on all working days
+# - schedule: cron(1/10 * ? * W *)
+# run every day at 6:00PM UTC
+# - schedule: cron(0 18 * * ? *)
