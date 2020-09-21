@@ -5,8 +5,8 @@ from datetime import date, timedelta
 def retrieve_toggl_data(CREDENTIALS, get_pdfs: bool) -> dict:
 
     ### Get Dates ###
-    today = date.today()
-    days_7 = today - timedelta(days=7)
+    today = date.today() - timedelta(days=1) # today == Sunday
+    days_7 = today - timedelta(days=6)
 
     # beginning = date(2019, 2, 2)
     # Monday Sept 14, 2020
