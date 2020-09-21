@@ -9,12 +9,13 @@ from email import encoders
 def send(data, pdf_attach: bool, CREDENTIALS) -> None:
     pdf_names = ["summary-report.pdf", "detailed-report.pdf", "weekly-report.pdf"]
     fromaddr = CREDENTIALS["username"]
-    toaddr   = CREDENTIALS["usernameTo"]
+    toaddr   = CREDENTIALS["recipients"]
     password = CREDENTIALS["password"]
 
-    msg = MIMEMultipart()  
-    msg['From'] = fromaddr  
-    msg['To'] = toaddr   
+    msg = MIMEMultipart()
+    msg['From'] = fromaddr 
+    # here TO needs to be ", ".join(recipients)
+    msg['To'] = ", ".join(toaddr)   
     msg['Subject'] = data["subject"]
     # msg.attach(MIMEText(data["body"], 'plain'))
     msg.attach(MIMEText(data["body"], 'html'))
